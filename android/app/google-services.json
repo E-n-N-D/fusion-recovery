@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "582562113325",
+    "project_id": "fusion-recovery",
+    "storage_bucket": "fusion-recovery.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582562113325:android:db8dd5258ec437652095a4",
+        "android_client_info": {
+          "package_name": "com.example.fusion_recovery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM4oYd-K0vSyA-V88QCDdkCDCo21_-H1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
