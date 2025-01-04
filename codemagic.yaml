@@ -12,14 +12,14 @@ workflows:
           if [ ! -f "ios/Podfile" ]; then
             echo "Creating Podfile..."
             cat <<EOF > ios/Podfile
-            platform :ios, '13.0'
-            use_frameworks!
-            target 'Runner' do
-              use_frameworks!
-              use_modular_headers!
-              flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-            end
-            EOF
+platform :ios, '13.0'
+use_frameworks!
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+end
+EOF
           else
             # Update the Podfile if it already exists
             echo "Updating existing Podfile..."
