@@ -1,0 +1,25 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Set iOS deployment target to 13.0
+        script: |
+          echo "Updating Podfile and Info.plist to iOS 13.0"
+          # Update Podfile
+          sed -i '' "s/platform :ios, '.*'/platform :ios, '13.0'/" ios/Podfile
+          
+          # Update AppFrameworkInfo.plist
+          /usr/libexec/PlistBuddy -c "Set :MinimumOSVersion 13.0" ios/Flutter/AppFrameworkInfo.plist
+          
+          # Ensure changes are applied
+          cd ios
+          pod install
+          cd ..
+
+      - flutter clean
+      - flutter pub get
+      - flutter build ios --release --no-codesign
