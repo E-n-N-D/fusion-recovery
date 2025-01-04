@@ -6,20 +6,36 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
-      - name: Set iOS deployment target to 13.0
+      - name: Create and set iOS deployment target in Podfile
         script: |
-          echo "Updating Podfile and Info.plist to iOS 13.0"
-          # Update Podfile
-          sed -i '' "s/platform :ios, '.*'/platform :ios, '13.0'/" ios/Podfile
-          
-          # Update AppFrameworkInfo.plist
-          /usr/libexec/PlistBuddy -c "Set :MinimumOSVersion 13.0" ios/Flutter/AppFrameworkInfo.plist
-          
-          # Ensure changes are applied
+          # Create Podfile if it does not exist
+          if [ ! -f "ios/Podfile" ]; then
+            echo "Creating Podfile..."
+            cat <<EOF > ios/Podfile
+            platform :ios, '13.0'
+            use_frameworks!
+            target 'Runner' do
+              use_frameworks!
+              use_modular_headers!
+              flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+            end
+            EOF
+          else
+            # Update the Podfile if it already exists
+            echo "Updating existing Podfile..."
+            sed -i '' "s/platform :ios, '.*'/platform :ios, '13.0'/" ios/Podfile
+          fi
+
+          # Ensure pods are installed
           cd ios
           pod install
           cd ..
 
-      - flutter clean
-      - flutter pub get
-      - flutter build ios --release --no-codesign
+      - name: Clean Flutter and get dependencies
+        script: |
+          flutter clean
+          flutter pub get
+
+      - name: Build iOS app
+        script: |
+          flutter build ios --release --no-codesign
