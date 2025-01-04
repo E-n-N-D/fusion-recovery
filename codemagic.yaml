@@ -20,11 +20,6 @@ workflows:
               flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
             end
             EOF
-          else
-            # Update the Podfile if it already exists
-            echo "Updating existing Podfile..."
-            sed -i '' "s/platform :ios, '.*'/platform :ios, '13.0'/" ios/Podfile
-          fi
 
           # Ensure pods are installed
           cd ios
