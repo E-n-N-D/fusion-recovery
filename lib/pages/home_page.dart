@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> fraData = [];
   List<Map<String, dynamic>> frrData = [];
   bool _isLoading = true;
+  bool downloadWait = false;
 
   bool hasError = false;
 
@@ -142,10 +143,19 @@ class _HomePageState extends State<HomePage> {
                                       : const SizedBox.shrink(),
                                   GestureDetector(
                                     onTap: () async {
-                                      await saveToExcel(
-                                          frcData[dateCount]['forDate']
-                                              .toString(),
-                                          context);
+                                      setState(() {
+                                        downloadWait = true;
+                                      });
+                                      try {
+                                        await saveToExcel(
+                                            frcData[dateCount]['forDate']
+                                                .toString(),
+                                            context);
+                                      } finally {
+                                        setState(() {
+                                          downloadWait = false;
+                                        });
+                                      }
                                     },
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
@@ -154,25 +164,38 @@ class _HomePageState extends State<HomePage> {
                                         height: 50,
                                         color: Colors.blue,
                                         padding: const EdgeInsets.all(8),
-                                        child: const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              "Download as Excel",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Icon(
-                                              Icons.download,
-                                              color: Colors.white,
+                                        child: downloadWait
+                                            ? const Center(
+                                              child: SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                    color: Colors.white,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                ),
                                             )
-                                          ],
-                                        ),
+                                            : const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Text(
+                                                    "Download as Excel",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Icon(
+                                                    Icons.download,
+                                                    color: Colors.white,
+                                                  )
+                                                ],
+                                              ),
                                       ),
                                     ),
                                   ),
