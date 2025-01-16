@@ -181,11 +181,11 @@ Future<void> saveToExcel(String forDate, BuildContext context) async {
       if (Platform.isAndroid) {
         directory = Directory('/storage/emulated/0/Download'); // Public Downloads folder
       } else {
-        directory = await getDownloadsDirectory(); // For non-Android platforms
+        directory = await getApplicationDocumentsDirectory(); // For non-Android platforms
       }
 
       // Ensure the directory exists
-      if (!directory!.existsSync()) {
+      if (!directory.existsSync()) {
         directory.createSync(recursive: true);
       }
 
