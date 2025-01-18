@@ -173,6 +173,7 @@ class _AddLogsState extends State<AddLogs> {
                     },
                     icon: const Icon(Icons.arrow_back_ios_new_outlined)),
                 Container(
+                  padding: const EdgeInsets.only(top: 15),
                   constraints: const BoxConstraints(maxHeight: 100),
                   margin: const EdgeInsets.all(5),
                   child: const Center(

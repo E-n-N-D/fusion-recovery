@@ -103,6 +103,7 @@ class _HomePageState extends State<HomePage> {
             : Column(
                 children: [
                   Container(
+                    padding: const EdgeInsets.only(top: 15),
                     constraints: const BoxConstraints(maxHeight: 100),
                     child: const Center(
                         child: Image(
