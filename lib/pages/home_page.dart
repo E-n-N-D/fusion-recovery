@@ -94,120 +94,121 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                Container(
-                  constraints: const BoxConstraints(maxHeight: 100),
-                  // margin: const EdgeInsets.all(5),
-                  child: const Center(
-                      child: Image(
-                    image: AssetImage('images/fusion-recovery.png'),
-                    fit: BoxFit.fill,
-                  )),
-                ),
-                SafeArea(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.sizeOf(context).height * 0.75,
-                          child: _dataListView(),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        frcData.isNotEmpty
-                            ? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  dateCount == 0
-                                      ? Buttonwidget(
-                                          bgColor: Colors.red,
-                                          buttonLabel: 'Delete Log',
-                                          onClick: () async {
-                                            await _databaseService.deleteAll(
-                                                frcData[dateCount]['forDate']);
-                                            setState(() {
-                                              frcData.removeAt(0);
-                                              fraData.removeAt(0);
-                                              frrData.removeAt(0);
-                                            });
-                                          })
-                                      : const SizedBox.shrink(),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      setState(() {
-                                        downloadWait = true;
-                                      });
-                                      try {
-                                        await saveToExcel(
-                                            frcData[dateCount]['forDate']
-                                                .toString(),
-                                            context);
-                                      } finally {
+    return SafeArea(
+      child: Scaffold(
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  Container(
+                    constraints: const BoxConstraints(maxHeight: 100),
+                    child: const Center(
+                        child: Image(
+                      image: AssetImage('images/fusion-recovery.png'),
+                      fit: BoxFit.fill,
+                    )),
+                  ),
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.sizeOf(context).height * 0.75,
+                            child: _dataListView(),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          frcData.isNotEmpty
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    dateCount == 0
+                                        ? Buttonwidget(
+                                            bgColor: Colors.red,
+                                            buttonLabel: 'Delete Log',
+                                            onClick: () async {
+                                              await _databaseService.deleteAll(
+                                                  frcData[dateCount]['forDate']);
+                                              setState(() {
+                                                frcData.removeAt(0);
+                                                fraData.removeAt(0);
+                                                frrData.removeAt(0);
+                                              });
+                                            })
+                                        : const SizedBox.shrink(),
+                                    GestureDetector(
+                                      onTap: () async {
                                         setState(() {
-                                          downloadWait = false;
+                                          downloadWait = true;
                                         });
-                                      }
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        width: 200,
-                                        height: 50,
-                                        color: Colors.blue,
-                                        padding: const EdgeInsets.all(8),
-                                        child: downloadWait
-                                            ? const Center(
-                                              child: SizedBox(
-                                                  width: 20,
-                                                  height: 20,
-                                                  child:
-                                                      const CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                    strokeWidth: 2,
+                                        try {
+                                          await saveToExcel(
+                                              frcData[dateCount]['forDate']
+                                                  .toString(),
+                                              context);
+                                        } finally {
+                                          setState(() {
+                                            downloadWait = false;
+                                          });
+                                        }
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          width: 200,
+                                          height: 50,
+                                          color: Colors.blue,
+                                          padding: const EdgeInsets.all(8),
+                                          child: downloadWait
+                                              ? const Center(
+                                                child: SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        const CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                      strokeWidth: 2,
+                                                    ),
                                                   ),
+                                              )
+                                              : const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Text(
+                                                      "Download as Excel",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Icon(
+                                                      Icons.download,
+                                                      color: Colors.white,
+                                                    )
+                                                  ],
                                                 ),
-                                            )
-                                            : const Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  Text(
-                                                    "Download as Excel",
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 16),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Icon(
-                                                    Icons.download,
-                                                    color: Colors.white,
-                                                  )
-                                                ],
-                                              ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox.shrink()
-                      ],
+                                  ],
+                                )
+                              : const SizedBox.shrink()
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
+                  )
+                ],
+              ),
+      ),
     );
   }
 

@@ -160,168 +160,170 @@ class _AddLogsState extends State<AddLogs> {
   @override
   Widget build(BuildContext context) {
     final double fntSize = MediaQuery.of(context).size.width * 0.05;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.maybePop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-              Container(
-                constraints: const BoxConstraints(maxHeight: 100),
-                margin: const EdgeInsets.all(5),
-                child: const Center(
-                    child: Image(
-                  image: AssetImage('images/fusion-recovery.png'),
-                  fit: BoxFit.fill,
-                )),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Text(
-                      count == 0
-                          ? 'Fusion Recovery Centers'
-                          : count == 1
-                              ? "Fusion Recovery Albany"
-                              : 'Fusion 820 River Residential',
-                      style: TextStyle(
-                          fontSize: fntSize,
-                          fontWeight: FontWeight.normal,
-                          letterSpacing: 2),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFromBuilder(
-                      formData: count == 0
-                          ? fusionRecoveryCenters
-                          : count == 1
-                              ? fusionRecoveryAlbany
-                              : fusion820RiverResidential,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (count != 0)
-                          Buttonwidget(
-                              bgColor: Colors.grey,
-                              buttonLabel: "Back",
-                              onClick: () {
-                                setState(() {
-                                  count -= 1;
-                                });
-                              }),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Buttonwidget(
-                            bgColor: count != 2 ? Colors.blue : Colors.green,
-                            buttonLabel: count != 2 ? "Next" : "Save",
-                            onClick: () {
-                              FocusScope.of(context).unfocus();
-                              if (_formKey.currentState!.validate()) {
-                                if (count == 2) {
-                                  FusionRecoveryCentersModel frc = FusionRecoveryCentersModel(
-                                      expenses: parseDouble(
-                                          fusionRecoveryCenters['frcExpenses']!
-                                              .text),
-                                      payroll: parseDouble(
-                                          fusionRecoveryCenters['frcPayroll']!
-                                              .text),
-                                      other: parseDouble(
-                                          fusionRecoveryCenters['frcOther']!
-                                              .text),
-                                      cashBalance: parseDouble(
-                                          fusionRecoveryCenters['frcCashBalance']!
-                                              .text),
-                                      creditCardBalance: parseDouble(
-                                          fusionRecoveryCenters['frcCreditCardBalance']!
-                                              .text),
-                                      a_r: parseDouble(
-                                          fusionRecoveryCenters['frcA/R']!.text),
-                                      forDate: widget.forDate,
-                                      updatedOn: Timestamp.now());
-
-                                  FusionRecoveryAlbany fra = FusionRecoveryAlbany(
-                                      billedRevenue: parseDouble(
-                                          fusionRecoveryAlbany['fraBilledRevenue']!
-                                              .text),
-                                      collectedRevenue: parseDouble(
-                                          fusionRecoveryAlbany[
-                                                  'fraCollectedRevenue']!
-                                              .text),
-                                      payroll: parseDouble(
-                                          fusionRecoveryAlbany['fraPayroll']!
-                                              .text),
-                                      otherExpenses: parseDouble(
-                                          fusionRecoveryAlbany[
-                                                  'fraOtherExpenses']!
-                                              .text),
-                                      netIncome: parseDouble(
-                                          fusionRecoveryAlbany['fraNetIncome']!
-                                              .text),
-                                      forDate: widget.forDate,
-                                      updatedOn: Timestamp.now());
-
-                                  Fusion820RiverResidential frr = Fusion820RiverResidential(
-                                      billedRevenue: parseDouble(
-                                          fusion820RiverResidential[
-                                                  'frrBilledRevenue']!
-                                              .text),
-                                      collectedRevenue: parseDouble(
-                                          fusion820RiverResidential[
-                                                  'frrCollectedRevenue']!
-                                              .text),
-                                      payroll: parseDouble(
-                                          fusion820RiverResidential['frrPayroll']!
-                                              .text),
-                                      other: parseDouble(
-                                          fusion820RiverResidential['frrOther']!
-                                              .text),
-                                      netIncome: parseDouble(
-                                          fusion820RiverResidential['frrNetIncome']!
-                                              .text),
-                                      forDate: widget.forDate,
-                                      updatedOn: Timestamp.now());
-
-                                  widget.isEdit
-                                      ? _databaseService.editAll(
-                                          frc, fra, frr, widget.forDate)
-                                      : _databaseService.addAll(frc, fra, frr);
-
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const HomePage()),
-                                    (Route<dynamic> route) =>
-                                        false, // This removes all previous routes
-                                  );
-                                } else {
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.maybePop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+                Container(
+                  constraints: const BoxConstraints(maxHeight: 100),
+                  margin: const EdgeInsets.all(5),
+                  child: const Center(
+                      child: Image(
+                    image: AssetImage('images/fusion-recovery.png'),
+                    fit: BoxFit.fill,
+                  )),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Text(
+                        count == 0
+                            ? 'Fusion Recovery Centers'
+                            : count == 1
+                                ? "Fusion Recovery Albany"
+                                : 'Fusion 820 River Residential',
+                        style: TextStyle(
+                            fontSize: fntSize,
+                            fontWeight: FontWeight.normal,
+                            letterSpacing: 2),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFromBuilder(
+                        formData: count == 0
+                            ? fusionRecoveryCenters
+                            : count == 1
+                                ? fusionRecoveryAlbany
+                                : fusion820RiverResidential,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (count != 0)
+                            Buttonwidget(
+                                bgColor: Colors.grey,
+                                buttonLabel: "Back",
+                                onClick: () {
                                   setState(() {
-                                    count += 1;
+                                    count -= 1;
                                   });
+                                }),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Buttonwidget(
+                              bgColor: count != 2 ? Colors.blue : Colors.green,
+                              buttonLabel: count != 2 ? "Next" : "Save",
+                              onClick: () {
+                                FocusScope.of(context).unfocus();
+                                if (_formKey.currentState!.validate()) {
+                                  if (count == 2) {
+                                    FusionRecoveryCentersModel frc = FusionRecoveryCentersModel(
+                                        expenses: parseDouble(
+                                            fusionRecoveryCenters['frcExpenses']!
+                                                .text),
+                                        payroll: parseDouble(
+                                            fusionRecoveryCenters['frcPayroll']!
+                                                .text),
+                                        other: parseDouble(
+                                            fusionRecoveryCenters['frcOther']!
+                                                .text),
+                                        cashBalance: parseDouble(
+                                            fusionRecoveryCenters['frcCashBalance']!
+                                                .text),
+                                        creditCardBalance: parseDouble(
+                                            fusionRecoveryCenters['frcCreditCardBalance']!
+                                                .text),
+                                        a_r: parseDouble(
+                                            fusionRecoveryCenters['frcA/R']!.text),
+                                        forDate: widget.forDate,
+                                        updatedOn: Timestamp.now());
+      
+                                    FusionRecoveryAlbany fra = FusionRecoveryAlbany(
+                                        billedRevenue: parseDouble(
+                                            fusionRecoveryAlbany['fraBilledRevenue']!
+                                                .text),
+                                        collectedRevenue: parseDouble(
+                                            fusionRecoveryAlbany[
+                                                    'fraCollectedRevenue']!
+                                                .text),
+                                        payroll: parseDouble(
+                                            fusionRecoveryAlbany['fraPayroll']!
+                                                .text),
+                                        otherExpenses: parseDouble(
+                                            fusionRecoveryAlbany[
+                                                    'fraOtherExpenses']!
+                                                .text),
+                                        netIncome: parseDouble(
+                                            fusionRecoveryAlbany['fraNetIncome']!
+                                                .text),
+                                        forDate: widget.forDate,
+                                        updatedOn: Timestamp.now());
+      
+                                    Fusion820RiverResidential frr = Fusion820RiverResidential(
+                                        billedRevenue: parseDouble(
+                                            fusion820RiverResidential[
+                                                    'frrBilledRevenue']!
+                                                .text),
+                                        collectedRevenue: parseDouble(
+                                            fusion820RiverResidential[
+                                                    'frrCollectedRevenue']!
+                                                .text),
+                                        payroll: parseDouble(
+                                            fusion820RiverResidential['frrPayroll']!
+                                                .text),
+                                        other: parseDouble(
+                                            fusion820RiverResidential['frrOther']!
+                                                .text),
+                                        netIncome: parseDouble(
+                                            fusion820RiverResidential['frrNetIncome']!
+                                                .text),
+                                        forDate: widget.forDate,
+                                        updatedOn: Timestamp.now());
+      
+                                    widget.isEdit
+                                        ? _databaseService.editAll(
+                                            frc, fra, frr, widget.forDate)
+                                        : _databaseService.addAll(frc, fra, frr);
+      
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const HomePage()),
+                                      (Route<dynamic> route) =>
+                                          false, // This removes all previous routes
+                                    );
+                                  } else {
+                                    setState(() {
+                                      count += 1;
+                                    });
+                                  }
                                 }
-                              }
-                            })
-                      ],
-                    )
-                  ],
-                )),
-          ),
-        ],
+                              })
+                        ],
+                      )
+                    ],
+                  )),
+            ),
+          ],
+        ),
       ),
     );
   }
